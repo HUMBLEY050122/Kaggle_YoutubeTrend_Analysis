@@ -1,5 +1,6 @@
 ## DaliyGrowth
 通过**DailyGrowth**，可查询高爆发视频，设置参数（growth_rate为参数增长倍数）为播放量在上榜后一天内翻了一倍以上的视频，可关注视频热点，进行热点相关推流
+
 同时，异常名字#NAME?为多国语言标题转化出现的异常量，应当忽略
 
 ![alt text](Figures/DG.png)
