@@ -1,49 +1,51 @@
-# 该库为基于[Kaggle_Trending Youtube Video Statistics数据集](https://www.kaggle.com/datasets/datasnaek/youtube-new)**Python**数据清洗代码和**MySQl** 分析代码
+# YouTube Trending Video 数据分析项目
 
+本项目基于 [Kaggle Trending YouTube Video Statistics 数据集](https://www.kaggle.com/datasets/datasnaek/youtube-new)，通过 **Python** 进行数据清洗，结合 **MySQL** 实现多维度数据分析，挖掘视频热点、用户行为及内容投放策略。
 
-## 其中Python部分包含
- ▸ 时区转换
- 
- ▸ 多国数据合并
- 
- ▸ 冗余字段清洗
- 
- ▸ 重复数据清洗
- 
- ▸ 基于Isolation Forest的异常值清洗
- 
-## 其中MySQL部分包含
-### DaliyGrowth
-通过**DailyGrowth**，可查询高爆发视频，设置参数（growth_rate为参数增长倍数）为播放量在上榜后一天内翻了一倍以上的视频，可关注视频热点，进行热点相关推流
-同时，异常名字#NAME?为多国语言标题转化出现的异常量，应当忽略
+---
 
-![DG](https://github.com/user-attachments/assets/92884d61-6e9d-43de-86fe-0aa0f53850f4)
+## 数据清洗（Python）
+清洗过程主要包括：
+- **时区转换**：统一各国数据时间格式
+- **多国数据合并**：整合多语言国家上榜视频
+- **冗余字段清洗**：剔除无效字段
+- **重复数据去除**：消除重复记录
+- **异常值检测**：基于 Isolation Forest 清洗播放量等异常项
 
-### HourlyActivity
-通过**HourlyActivity**，可查询互动率（互动量/播放量）较高，供需比较高的时间段，如图所示，中午10-12点，傍晚18-20点均是显著的高互动率时段，
+---
 
-![HA1](https://github.com/user-attachments/assets/1a89275b-025a-42e3-a9e3-4de25c4e0ec1)
+## 数据分析（MySQL）
 
-按供需比（互动量/发布视频数）可看出，尽管傍晚18-20点为发布高峰时段，但依旧互动率较高，相反凌晨尽管供需比较高，但互动率倒数，不是适合发布的时段
+主要包含以下模块：
 
-![HA2](https://github.com/user-attachments/assets/06ef5d56-0972-4b9d-841a-7873738c8987)
+### 1. `DailyGrowth` — 视频爆发增长识别
 
+- 识别播放量在上榜后一日内**增长翻倍**的视频（设置参数 `growth_rate`）
+- 可用于监测热点视频并进行推流推荐
 
-### LifeSpan
-通过**LifeSpan**,可查询长尾（上榜时间大于三天）爆款视频（单日上榜）数据
+> 注意：标题字段中 `#NAME?` 是因多语言编码异常产生，可忽略
 
-![LS1](https://github.com/user-attachments/assets/7233fc4f-0425-4605-ac06-226c390fe379)
+---
 
-其中按分区占比分化显著，爆款视频中新闻政治，娱乐八卦均在前三位
+### 2. `HourlyActivity` — 高互动时段分析
 
-![LS2](https://github.com/user-attachments/assets/a1088235-208e-407d-a623-64a32cecc23e)
+- 计算各小时互动率（互动量 / 播放量）
+- 识别**高互动时段**（如 10–12 点、18–20 点）
+- 提供**供需比**（互动量 / 视频数）辅助判断发布时机
 
-### VideoStats
-通过**VideoStats**，可查询赞与评论四象限，实现视频流量定点投放和舆情监控，高赞高评视频可能质量较高可以进一步推流，低赞低评视频可能出现舆情。
+---
 
-![VS1](https://github.com/user-attachments/assets/57928ff0-a378-489d-990d-6911bbcc0b1b)
+### 3. `LifeSpan` — 长尾爆款识别
 
-下为查询高赞高评视频具体id
+- 筛选生命周期超过三天的上榜视频
+- 分析其内容分区占比（如新闻、娱乐等）
+- 可指导内容创作方向
 
-![VS2](https://github.com/user-attachments/assets/9cca94e6-d049-40ac-9d75-9b933d61f1ab)
+---
 
+### 4. `VideoStats` — 舆情与流量四象限分析
+
+- 基于点赞数与评论数构建四象限
+    - **高赞高评**：优质内容，适合重点投放
+    - **低赞低评**：冷门或负面舆情，需警惕
+- 用于投放策略与舆情预警
